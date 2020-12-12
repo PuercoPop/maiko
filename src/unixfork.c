@@ -194,7 +194,7 @@ int ForkUnixShell(int slot, char ltr, char numb, char *termtype, char *shellarg)
    kill processing, echo, backspace to erase, echo ctrl
    chars as ^x, kill line by backspacing */
 
-#if defined(MACOSX) || defined(FREEBSD)
+#if defined(MACOSX) || defined(FREEBSD) || defined(CYGWIN)
     tcgetattr(SlaveFD, &tio);
 #else
     ioctl(SlaveFD, TCGETS, (char *)&tio);
@@ -204,7 +204,7 @@ int ForkUnixShell(int slot, char ltr, char numb, char *termtype, char *shellarg)
 #else
     tio.c_lflag |= ICANON | ECHO | ECHOE | ECHOCTL | ECHOKE;
 #endif /* INDIGO */
-#if defined(MACOSX) || defined(FREEBSD)
+#if defined(MACOSX) || defined(FREEBSD) | defined(CYGWIN)
     tcsetattr(SlaveFD, TCSANOW, &tio);
 #else
     ioctl(SlaveFD, TCSETS, (char *)&tio);
